@@ -2,26 +2,26 @@
 This repo illustrates how to create unary, server streaming, client streaming and bi-directional APIs using gRPC
 
 # gRPC
-Free and open source framework developed by Google
-Part of the CNCF (Cloud Native Computation Foundation)
-At a high level, it allows you to define REQUEST and RESPONSE for Remote Procedure Calls(RPCs) and handles the rest for you.
-Built on top of HTTP/2
-Data format → protocol buffers (proto requests and proto responses)
+- Free and open source framework developed by Google
+- Part of the CNCF (Cloud Native Computation Foundation)
+- At a high level, it allows you to define REQUEST and RESPONSE for Remote Procedure Calls(RPCs) and handles the rest for you.
+- Built on top of HTTP/2
+- Data format → protocol buffers (proto requests and proto responses)
 
 # Types of APIs in gRPC
-Unary
-Classic request-response type
-Basically the REST style, but you get all the advantages of protocol buffers and  HTTP/2
-The server and the client can push multiple messages as part of one request
-Unary calls are defined using Protocol buffers
-For each RPC call, we have to define a “Request” message and a “Response” message 
-Server streaming
-Enabled through HTTP/2
-Client makes one request and receives a stream of responses
-Client streaming
-Client sends a stream of requests to the server and expects a response at specific points
-Bi directional streaming
-Asynchronous sending of messages between the client and the server
+##  Unary
+- Classic request-response type
+- Basically the REST style, but you get all the advantages of protocol buffers and  HTTP/2
+- The server and the client can push multiple messages as part of one request
+- Unary calls are defined using Protocol buffers
+- For each RPC call, we have to define a “Request” message and a “Response” message 
+## Server streaming
+- Enabled through HTTP/2
+- Client makes one request and receives a stream of responses
+## Client streaming
+- Client sends a stream of requests to the server and expects a response at specific points
+## Bi directional streaming
+- Asynchronous sending of messages between the client and the server
 
 # gRPC vs REST 
 
@@ -37,9 +37,9 @@ Asynchronous sending of messages between the client and the server
 
 
 # Summary: why use gRPC
-Easy code generation in over 11 languages
-Uses a HTTP/2 → low latency, fast, secure, multiplexed
-SSL security is built in
-Support for streaming APIs for maximum performance
+- Easy code generation in over 11 languages
+- Uses a HTTP/2 → low latency, fast, secure, multiplexed
+- SSL security is built in
+- Support for streaming APIs for maximum performance
 
 
