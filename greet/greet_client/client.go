@@ -28,7 +28,9 @@ func main() {
 
 	// doServerStreaming(c)
 
-	doClientStreaming(c)
+	// doClientStreaming(c)
+
+	doBidirectionalStreaming(c)
 }
 
 func doUnary(c greetpb.GreetServiceClient) {
@@ -124,6 +126,76 @@ func doClientStreaming(c greetpb.GreetServiceClient) {
 		log.Fatalf("error while receing response from LongGreet RPC: %v", err)
 	}
 	fmt.Printf("LongGreet Response: %v\n", res)
+}
+
+func doBidirectionalStreaming(c greetpb.GreetServiceClient) {
+	fmt.Println("starting to do a Bidirectional Streaming RPC...")
+
+	// create a stream by invoking the client
+	stream, err := c.GreetEveryone(context.Background())
+	if err != nil {
+		log.Fatalf("error while creating GreetEveryone RPC stream: %v", err)
+		return
+	}
+
+	requests := []*greetpb.GreetEveryoneRequest{
+		{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Stephane",
+			},
+		},
+		{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Mark",
+			},
+		},
+		{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Melvin",
+			},
+		},
+		{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Piper",
+			},
+		},
+		{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Lucys",
+			},
+		},
+	}
+
+	waitChannel := make(chan struct{})
+	// send a bunch of messages to the client (goroutine)
+	go func() {
+		// function to send a bunch of messages
+		for _, req := range requests {
+			fmt.Printf("sending message: %v\n", req)
+			stream.Send(req)
+			time.Sleep(1000 * time.Millisecond)
+		}
+		// done sending stuff to the server
+		stream.CloseSend()
+	}()
+	// receive a bunch of messages from the client (goroutine)
+	go func() {
+		// function to receive a bunch of messages
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("Error while receiving in bidirectional stream: %v", err)
+				break
+			}
+			fmt.Printf("Received: %v during bidirectional stream\n", res.GetResult())
+		}
+		close(waitChannel)
+	}()
+	// block until everything is done
+	<-waitChannel
 }
 
 // create a connection to the server
